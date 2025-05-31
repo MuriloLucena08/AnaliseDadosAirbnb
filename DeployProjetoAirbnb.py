@@ -8,13 +8,6 @@ import joblib
 import os
 import gdown
 
-# === Download do modelo do Google Drive, se não existir localmente ===
-file_id = "1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"
-url = f"https://drive.google.com/uc?id={file_id}"
-modelo_path = 'modelo.joblib'
-
-if not os.path.exists(modelo_path):
-    gdown.download(url, modelo_path, quiet=False)
 
 # === Interface do Streamlit ===
 
@@ -65,6 +58,14 @@ if botao:
     colunas = list(dados.columns)[1:-1]
     
     valores_x = valores_x[colunas]
+
+# === Download do modelo do Google Drive, se não existir localmente ===
+    file_id = "1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"
+    url = f"https://drive.google.com/uc?id={file_id}"
+    modelo_path = 'modelo.joblib'
+
+    if not os.path.exists(modelo_path):
+        gdown.download(url, modelo_path, quiet=False)
     
     modelo = joblib.load(modelo_path)
     preco = modelo.predict(valores_x)
