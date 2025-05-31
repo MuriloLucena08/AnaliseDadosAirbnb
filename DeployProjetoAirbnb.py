@@ -6,7 +6,7 @@ import streamlit as st
 from sklearn.ensemble import ExtraTreesRegressor
 import joblib
 import os
-import request
+import requests
 
 # === Interface do Streamlit ===
 
