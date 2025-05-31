@@ -1,9 +1,9 @@
-streamlit
+streamlit==1.25.0
 pandas
-numpy==1.24.3
+numpy==1.23.5
 scikit-learn==1.2.2
-joblib
+joblib==1.2.0
 seaborn
 matplotlib
 plotly
-gdown
+#gdown  # Remova temporariamente para teste
