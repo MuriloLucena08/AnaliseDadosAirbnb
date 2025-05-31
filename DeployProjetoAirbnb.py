@@ -11,13 +11,6 @@ import gdown
 file_id = "1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"
 modelo_path = 'modelo.joblib'
 
-# Tenta baixar o modelo apenas se não existir
-
-if not os.path.exists(modelo_path):
-    st.write("🔽 Baixando modelo do Google Drive...")
-    gdown.download(id=file_id, output=modelo_path, quiet=False)
-
-
 # === Interface do Streamlit ===
 
 x_numericos = {'latitude': 0, 'longitude': 0, 'accommodates': 0, 'bathrooms': 0, 'bedrooms': 0, 'beds': 0, 'extra_people': 0,
@@ -67,6 +60,11 @@ if botao:
     colunas = list(dados.columns)[1:-1]
     
     valores_x = valores_x[colunas]
+
+    # Tenta baixar o modelo apenas se não existir
+    if not os.path.exists(modelo_path):
+        st.write("🔽 Baixando modelo do Google Drive...")
+        gdown.download(id=file_id, output=modelo_path, quiet=False)
 
     if os.path.exists(modelo_path):
       modelo = joblib.load(modelo_path)
