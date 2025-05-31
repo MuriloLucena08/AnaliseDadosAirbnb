@@ -1,8 +1,9 @@
+streamlit
 pandas
 numpy
+scikit-learn==1.2.2
+joblib
 seaborn
 matplotlib
 plotly
-scikit-learn
-joblib
-streamlit
+# trigger redeploy
