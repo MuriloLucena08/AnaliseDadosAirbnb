@@ -1,17 +1,25 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[12]:
-
-
 import pandas as pd
 import streamlit as st
 from sklearn.ensemble import ExtraTreesRegressor
 import joblib
+import os
+import gdown
 
-# modelo = joblib.load('modelo.joblib')
+# === Download do modelo do Google Drive, se não existir localmente ===
+file_id = "1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"
+url = f"https://drive.google.com/uc?id={file_id}"
+modelo_path = 'modelo.joblib'
 
-        
+if not os.path.exists(modelo_path):
+    gdown.download(url, modelo_path, quiet=False)
+
+modelo = joblib.load(modelo_path)
+
+# === Interface do Streamlit ===
+
 x_numericos = {'latitude': 0, 'longitude': 0, 'accommodates': 0, 'bathrooms': 0, 'bedrooms': 0, 'beds': 0, 'extra_people': 0,
                'minimum_nights': 0, 'ano': 0, 'mes': 0, 'n_amenities': 0, 'host_listings_count': 0}
 
@@ -63,5 +71,3 @@ if botao:
     modelo = joblib.load('modelo.joblib')
     preco = modelo.predict(valores_x)
     st.write(preco[0])
-    
-
