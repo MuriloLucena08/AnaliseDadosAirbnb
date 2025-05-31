@@ -63,15 +63,29 @@ if botao:
     file_id = "1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"
     modelo_path = "modelo.joblib"
     
-    if not os.path.exists(modelo_path):
-        st.write("🔽 Baixando modelo do Google Drive...")
-        gdown.download(id=file_id, output=modelo_path, quiet=False)
+    file_id = "1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"
+    url = f"https://drive.google.com/uc?id={file_id}"
+    modelo_path = "modelo.joblib"
 
-    if os.path.exists(modelo_path):
+  # Tenta baixar o modelo se ainda não existe
+    if not os.path.exists(modelo_path):
+    try:
+        st.write("🔽 Baixando modelo do Google Drive...")
+        gdown.download(url, modelo_path, quiet=False)
+    except Exception as e:
+        st.error(f"Erro ao baixar modelo: {e}")
+        st.stop()
+
+  # Tenta carregar o modelo
+  try:
       modelo = joblib.load(modelo_path)
       st.success("✅ Modelo carregado com sucesso!")
-    else:
-      st.error("❌ O arquivo 'modelo.joblib' não foi encontrado. Verifique se está público no Google Drive.")
+  except FileNotFoundError:
+    st.error("❌ Arquivo 'modelo.joblib' não foi encontrado.")
+    st.stop()
+  except Exception as e:
+    st.error(f"❌ Erro ao carregar o modelo: {e}")
+    st.stop()
     
     preco = modelo.predict(valores_x)
     st.write(preco[0]) 
