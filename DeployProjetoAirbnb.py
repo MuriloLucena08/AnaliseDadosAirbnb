@@ -57,35 +57,32 @@ if botao:
     colunas = list(dados.columns)[1:-1]
     
     valores_x = valores_x[colunas]
-
-    # Tenta baixar o modelo apenas se não existir
     
-    file_id = "1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"
-    modelo_path = "modelo.joblib"
+  # Tenta baixar o modelo se ainda não existe
     
     file_id = "1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"
     url = f"https://drive.google.com/uc?id={file_id}"
     modelo_path = "modelo.joblib"
-
-  # Tenta baixar o modelo se ainda não existe
+    
+    
     if not os.path.exists(modelo_path):
-    try:
-        st.write("🔽 Baixando modelo do Google Drive...")
-        gdown.download(url, modelo_path, quiet=False)
-    except Exception as e:
-        st.error(f"Erro ao baixar modelo: {e}")
+      try:
+            st.write("🔽 Baixando modelo do Google Drive...")
+            gdown.download(url, modelo_path, quiet=False)
+      except Exception as e:
+            st.error(f"Erro ao baixar modelo: {e}")
+            st.stop()
+    
+    # Tenta carregar o modelo
+      try:
+          modelo = joblib.load(modelo_path)
+          st.success("✅ Modelo carregado com sucesso!")
+      except FileNotFoundError:
+        st.error("❌ Arquivo 'modelo.joblib' não foi encontrado.")
         st.stop()
-
-  # Tenta carregar o modelo
-  try:
-      modelo = joblib.load(modelo_path)
-      st.success("✅ Modelo carregado com sucesso!")
-  except FileNotFoundError:
-    st.error("❌ Arquivo 'modelo.joblib' não foi encontrado.")
-    st.stop()
-  except Exception as e:
-    st.error(f"❌ Erro ao carregar o modelo: {e}")
-    st.stop()
+      except Exception as e:
+        st.error(f"❌ Erro ao carregar o modelo: {e}")
+        st.stop()
     
     preco = modelo.predict(valores_x)
     st.write(preco[0]) 
