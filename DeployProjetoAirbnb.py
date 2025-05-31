@@ -61,7 +61,7 @@ if botao:
   # Tenta baixar o modelo se ainda não existe
     
     file_id = "1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"
-    url = f"https://drive.google.com/uc?id={file_id}"
+    url = f"https://drive.google.com/file/d/{file_id}/view?usp=drive_link"
     modelo_path = "modelo.joblib"
     
     
