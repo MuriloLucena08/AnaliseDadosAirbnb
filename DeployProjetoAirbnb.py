@@ -16,8 +16,6 @@ modelo_path = 'modelo.joblib'
 if not os.path.exists(modelo_path):
     gdown.download(url, modelo_path, quiet=False)
 
-modelo = joblib.load(modelo_path)
-
 # === Interface do Streamlit ===
 
 x_numericos = {'latitude': 0, 'longitude': 0, 'accommodates': 0, 'bathrooms': 0, 'bedrooms': 0, 'beds': 0, 'extra_people': 0,
@@ -68,6 +66,6 @@ if botao:
     
     valores_x = valores_x[colunas]
     
-    
+    modelo = joblib.load(modelo_path)
     preco = modelo.predict(valores_x)
     st.write(preco[0])
