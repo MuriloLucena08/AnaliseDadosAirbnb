@@ -6,7 +6,7 @@ import streamlit as st
 from sklearn.ensemble import ExtraTreesRegressor
 import joblib
 import os
-import gdown
+import request
 
 # === Interface do Streamlit ===
 
@@ -60,30 +60,29 @@ if botao:
 
     # Informações do modelo
   
+    file_id = "1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"
+    url = f"https://drive.google.com/uc?export=download&id={file_id}"  
     modelo_path = "modelo.joblib"
-    url = "https://drive.google.com/uc?export=download&id=1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"
 
-    # Baixa o modelo se não existir localmente
-  
-    if not os.path.exists(modelo_path):
-        st.write("🔽 Baixando o modelo do Google Drive...")
-        try:
-            gdown.download(url=url, output=modelo_path, quiet=False)
-        except Exception as e:
-            st.error(f"❌ Erro ao baixar o modelo: {e}")
+    st.write("🔽 Baixando o modelo do Google Drive...")
 
-    # Carrega o modelo se o arquivo existir
-  
+    # Tenta baixar com requests
+    
+    response = requests.get(url)
+    if response.status_code == 200:
+        with open(modelo_path, "wb") as f:
+            f.write(response.content)
+        st.success("✅ Download concluído com sucesso!")
+    else:
+        st.error("❌ Erro ao baixar o arquivo do Google Drive.")
+
+    # Carrega o modelo, se o arquivo existir
     if os.path.exists(modelo_path):
         try:
             modelo = joblib.load(modelo_path)
             st.success("✅ Modelo carregado com sucesso!")
-
-            # Faz a previsão
-          
             preco = modelo.predict(valores_x)
-            st.subheader("💰 Valor previsto para o imóvel:")
-            st.write(f"R$ {preco[0]:,.2f}")
+            st.write(f"💰 Valor estimado do imóvel: R$ {preco[0]:,.2f}")
         except Exception as e:
             st.error(f"❌ Erro ao carregar o modelo: {e}")
     else:
