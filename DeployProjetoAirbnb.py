@@ -59,8 +59,9 @@ if botao:
     valores_x = valores_x[colunas]
     
     file_id = "1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"
-    url = f"https://drive.google.com/file/d/{file_id}/view?usp=drive_link"
     modelo_path = "modelo.joblib"
+    url = f"https://drive.google.com/uc?export=download&id={file_id}"
+    
 
   # Força remover qualquer versão corrompida do arquivo
     if os.path.exists(modelo_path):
@@ -75,10 +76,9 @@ if botao:
       try:
           modelo = joblib.load(modelo_path)
           st.success("✅ Modelo carregado com sucesso!")
+          preco = modelo.predict(valores_x)
+          st.write(preco[0]) 
       except Exception as e:
           st.error(f"❌ Erro ao carregar o modelo: {e}")
     else:
       st.error("❌ O arquivo 'modelo.joblib' não foi encontrado.")
-    
-    preco = modelo.predict(valores_x)
-    st.write(preco[0]) 
