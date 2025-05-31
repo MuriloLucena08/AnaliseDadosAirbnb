@@ -60,9 +60,8 @@ if botao:
 
     # Informações do modelo
   
-    file_id = "1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"
     modelo_path = "modelo.joblib"
-    url = f"https://drive.google.com/uc?export=download&id={file_id}"
+    url = "https://drive.google.com/uc?export=download&id=1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"
 
     # Baixa o modelo se não existir localmente
   
