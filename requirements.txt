@@ -6,4 +6,4 @@ joblib==1.2.0
 seaborn
 matplotlib
 plotly
-#gdown  # Remova temporariamente para teste
+gdown==4.6.4
