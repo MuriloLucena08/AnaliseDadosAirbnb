@@ -68,7 +68,7 @@ if botao:
     if not os.path.exists(modelo_path):
       try:
             st.write("🔽 Baixando modelo do Google Drive...")
-            gdown.download(url, modelo_path, quiet=False)
+            gdown.download(url=url, output=modelo_path, quiet=False)
       except Exception as e:
             st.error(f"Erro ao baixar modelo: {e}")
             st.stop()
