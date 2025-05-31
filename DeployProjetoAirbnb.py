@@ -68,6 +68,6 @@ if botao:
     
     valores_x = valores_x[colunas]
     
-    modelo = joblib.load('modelo.joblib')
+    
     preco = modelo.predict(valores_x)
     st.write(preco[0])
