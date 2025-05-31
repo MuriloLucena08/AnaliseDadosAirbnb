@@ -8,6 +8,15 @@ import joblib
 import os
 import gdown
 
+file_id = "1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"
+modelo_path = 'modelo.joblib'
+
+# Tenta baixar o modelo apenas se não existir
+
+if not os.path.exists(modelo_path):
+    st.write("🔽 Baixando modelo do Google Drive...")
+    gdown.download(id=file_id, output=modelo_path, quiet=False)
+
 
 # === Interface do Streamlit ===
 
@@ -59,13 +68,11 @@ if botao:
     
     valores_x = valores_x[colunas]
 
-# === Download do modelo do Google Drive, se não existir localmente ===
-    file_id = "1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"
-    url = f"https://drive.google.com/uc?id={file_id}"
-    modelo_path = 'modelo.joblib'
-
-    if not os.path.exists(modelo_path):
-        gdown.download(url, modelo_path, quiet=False)
+    if os.path.exists(modelo_path):
+      modelo = joblib.load(modelo_path)
+      st.success("✅ Modelo carregado com sucesso!")
+    else:
+      st.error("❌ O arquivo 'modelo.joblib' não foi encontrado. Verifique se está público no Google Drive.")
     
     modelo = joblib.load(modelo_path)
     preco = modelo.predict(valores_x)
