@@ -80,11 +80,8 @@ if botao:
         st.error(f"❌ Erro ao ler 'dados.csv': {e}")
         st.stop()
 
-    st.write("🔽 Baixando o modelo do Google Drive...")
-    sucesso = download_large_file_from_gdrive(file_id, modelo_path)
-    
     modelo_path = "modelo.joblib"
-
+    
     if os.path.exists(modelo_path):
         try:
             modelo = joblib.load(modelo_path)
