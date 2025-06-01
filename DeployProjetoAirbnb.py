@@ -27,7 +27,7 @@ def download_file_from_google_drive(file_id, destination):
         response = session.get(URL, params=params, stream=True)
 
     with open(destination, "wb") as f:
-        for chunk in response.iter_content(chunk_size=1024 * 1024):
+        for chunk in response.iter_content(32768):
             if chunk:
                 f.write(chunk)
 
