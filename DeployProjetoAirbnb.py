@@ -85,6 +85,10 @@ if botao:
 
     st.write("🔽 Baixando o modelo do Google Drive...")
     sucesso = download_large_file_from_gdrive(file_id, modelo_path)
+    with open(modelo_path, "r", encoding="utf-8", errors="ignore") as f:
+        conteudo = f.read(500)
+        st.text("Prévia do conteúdo baixado:")
+        st.text(conteudo)
 
     if sucesso:
         st.success("✅ Download concluído com sucesso!")
