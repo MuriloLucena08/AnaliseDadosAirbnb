@@ -5,43 +5,43 @@ import joblib
 import os
 import requests
 
-# === Função para baixar arquivos do Google Drive com token de confirmação ===
-def download_large_file_from_gdrive(file_id, destination):
-    def get_confirm_token(response):
-        for key, value in response.cookies.items():
-            if key.startswith('download_warning'):
-                return value
-        return None
-
-    def save_response_content(response, destination):
-        with open(destination, "wb") as f:
-            for chunk in response.iter_content(32768):
-                if chunk:
-                    f.write(chunk)
-
-    URL = "https://docs.google.com/uc?export=download"
-    session = requests.Session()
-    response = session.get(URL, params={'id': file_id}, stream=True)
-    token = get_confirm_token(response)
-
-    if token:
-        params = {'id': file_id, 'confirm': token}
-        response = session.get(URL, params=params, stream=True)
-
-    save_response_content(response, destination)
-    return os.path.exists(destination) and os.path.getsize(destination) > 10_000
-
+# === Função para baixar modelo do S3 ===
+def baixar_modelo_do_s3(url, destino):
+    try:
+        response = requests.get(url, stream=True)
+        if response.status_code == 200:
+            with open(destino, 'wb') as file:
+                for chunk in response.iter_content(1024):
+                    file.write(chunk)
+            return True
+        else:
+            return False
+    except Exception as e:
+        st.error(f"Erro ao baixar modelo do S3: {e}")
+        return False
 
 # === Interface do Streamlit ===
 
-x_numericos = {'latitude': 0, 'longitude': 0, 'accommodates': 0, 'bathrooms': 0, 'bedrooms': 0, 'beds': 0, 'extra_people': 0,
-               'minimum_nights': 0, 'ano': 0, 'mes': 0, 'n_amenities': 0, 'host_listings_count': 0}
+x_numericos = {
+    'latitude': 0, 'longitude': 0, 'accommodates': 0, 'bathrooms': 0,
+    'bedrooms': 0, 'beds': 0, 'extra_people': 0, 'minimum_nights': 0,
+    'ano': 0, 'mes': 0, 'n_amenities': 0, 'host_listings_count': 0
+}
 
 x_tf = {'host_is_superhost': 0, 'instant_bookable': 0}
 
-x_listas = {'property_type': ['Apartment', 'Bed and breakfast', 'Condominium', 'Guest suite', 'Guesthouse', 'Hostel', 'House', 'Loft', 'Outros', 'Serviced apartment'],
-            'room_type': ['Entire home/apt', 'Hotel room', 'Private room', 'Shared room'],
-            'cancellation_policy': ['flexible', 'moderate', 'strict', 'strict_14_with_grace_period']}
+x_listas = {
+    'property_type': [
+        'Apartment', 'Bed and breakfast', 'Condominium', 'Guest suite',
+        'Guesthouse', 'Hostel', 'House', 'Loft', 'Outros', 'Serviced apartment'
+    ],
+    'room_type': [
+        'Entire home/apt', 'Hotel room', 'Private room', 'Shared room'
+    ],
+    'cancellation_policy': [
+        'flexible', 'moderate', 'strict', 'strict_14_with_grace_period'
+    ]
+}
 
 dicionario = {}
 for item in x_listas:
@@ -81,14 +81,19 @@ if botao:
         st.stop()
 
     modelo_path = "modelo.joblib"
-    
-    if os.path.exists(modelo_path):
-        try:
-            modelo = joblib.load(modelo_path)
-            st.success("✅ Modelo carregado com sucesso!")
-            preco = modelo.predict(valores_x)
-            st.write(f"💰 Valor previsto: R$ {preco[0]:,.2f}")
-        except Exception as e:
-            st.error(f"❌ Erro ao carregar o modelo: {e}")
-    else:
-        st.error("❌ O arquivo 'modelo.joblib' não foi encontrado no repositório.")
+    modelo_url = "https://meu-bucket-streamli-joblib.s3.us-east-2.amazonaws.com/modelo.joblib"
+
+    if not os.path.exists(modelo_path):
+        st.info("🔄 Baixando o modelo do S3...")
+        sucesso = baixar_modelo_do_s3(modelo_url, modelo_path)
+        if not sucesso:
+            st.error("❌ Falha ao baixar o modelo do S3.")
+            st.stop()
+
+    try:
+        modelo = joblib.load(modelo_path)
+        st.success("✅ Modelo carregado com sucesso!")
+        preco = modelo.predict(valores_x)
+        st.write(f"💰 Valor previsto: R$ {preco[0]:,.2f}")
+    except Exception as e:
+        st.error(f"❌ Erro ao carregar o modelo: {e}")
