@@ -27,7 +27,7 @@ def download_file_from_google_drive(file_id, destination):
         response = session.get(URL, params=params, stream=True)
 
     with open(destination, "wb") as f:
-        for chunk in response.iter_content(32768):
+        for chunk in response.iter_content(chunk_size=1024 * 1024):
             if chunk:
                 f.write(chunk)
 
@@ -86,8 +86,6 @@ if botao:
     file_id = "1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"  
     modelo_path = "modelo.joblib"
 
-    st.write("🔽 Baixando o modelo do Google Drive...")
-
     # Tenta baixar com requests
     
     if not os.path.exists(modelo_path):
@@ -95,6 +93,8 @@ if botao:
         try:
             download_file_from_google_drive(file_id, modelo_path)
             st.success("✅ Download concluído com sucesso!")
+            tamanho = os.path.getsize("modelo.joblib")
+            st.write(f"Tamanho do arquivo: {tamanho} bytes")
         except Exception as e:
             st.error(f"❌ Erro no download: {e}")
 
