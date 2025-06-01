@@ -83,30 +83,28 @@ if botao:
 
     # Informações do modelo
   
-    file_id = "1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"
-    url = f"https://drive.google.com/uc?export=download&id={file_id}"  
+    file_id = "1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"  
     modelo_path = "modelo.joblib"
 
     st.write("🔽 Baixando o modelo do Google Drive...")
 
     # Tenta baixar com requests
     
-    response = requests.get(url)
-    if response.status_code == 200:
-        with open(modelo_path, "wb") as f:
-            f.write(response.content)
-        st.success("✅ Download concluído com sucesso!")
-    else:
-        st.error("❌ Erro ao baixar o arquivo do Google Drive.")
+    if not os.path.exists(modelo_path):
+        st.write("🔽 Baixando o modelo do Google Drive...")
+        try:
+            download_file_from_google_drive(file_id, modelo_path)
+            st.success("✅ Download concluído com sucesso!")
+        except Exception as e:
+            st.error(f"❌ Erro no download: {e}")
 
-    # Carrega o modelo, se o arquivo existir
     if os.path.exists(modelo_path):
         try:
             modelo = joblib.load(modelo_path)
             st.success("✅ Modelo carregado com sucesso!")
             preco = modelo.predict(valores_x)
-            st.write(f"💰 Valor estimado do imóvel: R$ {preco[0]:,.2f}")
+            st.write(f"💰 Preço previsto: R$ {preco[0]:,.2f}")
         except Exception as e:
             st.error(f"❌ Erro ao carregar o modelo: {e}")
     else:
-        st.error("❌ O arquivo 'modelo.joblib' não foi encontrado.")
+        st.error("❌ Arquivo 'modelo.joblib' não foi encontrado.")
