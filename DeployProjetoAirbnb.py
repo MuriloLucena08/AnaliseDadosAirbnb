@@ -80,25 +80,18 @@ if botao:
         st.error(f"❌ Erro ao ler 'dados.csv': {e}")
         st.stop()
 
-    file_id = "1ye3spxljaGmwRQn_qh2vufEUTWwBwplz"
-    modelo_path = "modelo.joblib"
-
     st.write("🔽 Baixando o modelo do Google Drive...")
     sucesso = download_large_file_from_gdrive(file_id, modelo_path)
-    with open(modelo_path, "r", encoding="utf-8", errors="ignore") as f:
-        conteudo = f.read(500)
-        st.text("Prévia do conteúdo baixado:")
-        st.text(conteudo)
+    
+    modelo_path = "modelo.joblib"
 
-    if sucesso:
-        st.success("✅ Download concluído com sucesso!")
-        st.write(f"Tamanho do arquivo: {os.path.getsize(modelo_path)} bytes")
+    if os.path.exists(modelo_path):
         try:
             modelo = joblib.load(modelo_path)
             st.success("✅ Modelo carregado com sucesso!")
             preco = modelo.predict(valores_x)
-            st.write(f"💰 Preço previsto: R$ {preco[0]:,.2f}")
+            st.write(f"💰 Valor previsto: R$ {preco[0]:,.2f}")
         except Exception as e:
             st.error(f"❌ Erro ao carregar o modelo: {e}")
     else:
-        st.error("❌ Falha ao baixar o arquivo corretamente.")
+        st.error("❌ O arquivo 'modelo.joblib' não foi encontrado no repositório.")
