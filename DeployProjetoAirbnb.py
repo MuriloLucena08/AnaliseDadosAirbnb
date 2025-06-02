@@ -68,15 +68,12 @@ for item in x_listas:
 botao = st.button('Prever Valor do Imóvel')
 
 if botao:
-    st.write("✅ Botão clicado")
     dicionario.update(x_numericos)
     dicionario.update(x_tf)
     valores_x = pd.DataFrame(dicionario, index=[0])
-    st.write("🔎 Shape do input:", valores_x.shape)
 
     try:
         dados = pd.read_csv('dados.csv')
-        st.write("📄 'dados.csv' carregado com sucesso")
         colunas = list(dados.columns)[1:-1]
         valores_x = valores_x[colunas]
     except Exception as e:
@@ -87,17 +84,14 @@ if botao:
     modelo_url = "https://meu-bucket-streamli-joblib.s3.us-east-2.amazonaws.com/modelo.joblib"
 
     if not os.path.exists(modelo_path):
-        st.info("🔄 Baixando o modelo do S3...")
+        st.info("🔄")
         sucesso = baixar_modelo_do_s3(modelo_url, modelo_path)
         if not sucesso:
             st.error("❌ Falha ao baixar o modelo do S3.")
             st.stop()
-        else:
-            st.write("📥 Modelo baixado. Tamanho:", os.path.getsize(modelo_path))
 
     try:
         modelo = joblib.load(modelo_path)
-        st.success("✅ Modelo carregado com sucesso!")
         st.write("⚙️ Realizando predição...")
         preco = modelo.predict(valores_x)
         st.write(f"💰 Valor previsto: R$ {preco[0]:,.2f}")
