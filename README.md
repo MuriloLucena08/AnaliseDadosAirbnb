@@ -5,7 +5,7 @@
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-ML-orange?logo=scikit-learn)](https://scikit-learn.org/)
 [![Status](https://img.shields.io/badge/deploy-success-brightgreen)](https://deploy-projetoairbnb.streamlit.app/)
 
-Aplicativo interativo para previsão de valores de imóveis anunciados no Airbnb, utilizando Machine Learning com `ExtraTreesRegressor` e interface em Streamlit.
+Aplicativo interativo para previsão de valores de imóveis anunciados no Airbnb nos anos 2018, 2019 e 2020, utilizando Machine Learning com `ExtraTreesRegressor` e interface em Streamlit.
 
 👉 **Acesse agora:**
 🔗 [https://deploy-projetoairbnb.streamlit.app/](https://deploy-projetoairbnb.streamlit.app/)
@@ -54,6 +54,7 @@ O objetivo é criar uma ferramenta simples e intuitiva que permita prever o pre�
 
 ```
 📁 AnaliseDadosAirbnb/
+├──Solução Airbnb Rio.ipynb       # Arquivo que roda a análise dos dados com o dataset, faz o machine learning e gera os arquivos dados.csv e modelo.joblib
 ├── DeployProjetoAirbnb.py        # Código principal do app Streamlit
 ├── dados.csv                     # Base de apoio para entrada dos dados
 ├── modelo.joblib                 # Modelo de ML treinado e comprimido
@@ -82,6 +83,8 @@ streamlit run DeployProjetoAirbnb.py
 ## 📝 Observações
 
 > Este projeto utiliza uma **versão simplificada do modelo** para garantir compatibilidade com os limites de memória da nuvem. A versão original, com mais estimadores, é mais precisa, mas inviável para deploy gratuito.
+> O dataset não está disponivel no repositório, pois é um arquivo muito grande. Caso queira rodar o código posso disponibilizar no meu S3 da AWS ai é so baixar [S3]()
+> Fique a vontade de rodar e atualizar os dados do dataset para os dias atuais e usar outros algoritmos de inteligencia artificial
 
 ---
 
