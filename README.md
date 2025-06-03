@@ -83,7 +83,7 @@ streamlit run DeployProjetoAirbnb.py
 ## 📝 Observações
 
 > Este projeto utiliza uma **versão simplificada do modelo** para garantir compatibilidade com os limites de memória da nuvem. A versão original, com mais estimadores, é mais precisa, mas inviável para deploy gratuito.
-> O dataset não está disponivel no repositório, pois é um arquivo muito grande. Caso queira rodar o código posso disponibilizar no meu S3 da AWS ai é so baixar [S3]()
+> O dataset não está disponivel no repositório, pois é um arquivo muito grande. Caso queira rodar o código posso disponibilizar URL SW da AWS ai é so baixar [Link](https://meu-bucketdatasetcsv.s3.us-east-2.amazonaws.com/dataset+/dataset.zip)
 > Fique a vontade de rodar e atualizar os dados do dataset para os dias atuais e usar outros algoritmos de inteligencia artificial
 
 ---
